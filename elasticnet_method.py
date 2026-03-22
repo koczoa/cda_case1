@@ -1,12 +1,12 @@
-import pandas as pd
 import numpy as np
+import pandas as pd
 from sklearn.compose import ColumnTransformer
 from sklearn.impute import SimpleImputer, KNNImputer
-from sklearn.linear_model import ElasticNet, ElasticNetCV
+from sklearn.linear_model import ElasticNetCV
 from sklearn.metrics import mean_squared_error
 from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
-from sklearn.preprocessing import StandardScaler, OneHotEncoder
+from sklearn.preprocessing import OneHotEncoder, RobustScaler
 
 df = pd.read_csv("case1Data.csv")
 data = df.dropna(subset=['y'])
@@ -28,7 +28,7 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_
 
 num_transformer = Pipeline([
     ('imputer', KNNImputer(n_neighbors=5)),
-    ('scaler', StandardScaler())
+    ('scaler', RobustScaler())
 ])
 
 cat_transformer = Pipeline([
@@ -45,7 +45,8 @@ l1_ratios = [0.1, 0.3, 0.5, 0.7, 0.9, 0.95, 1.0]
 en_cv = ElasticNetCV(
     l1_ratio=l1_ratios,
     alphas=np.logspace(-3, 2, 60),
-    cv=5,
+    cv=80,
+    # cv=5,
     max_iter=20000,
     random_state=42,
     n_jobs=-1
@@ -71,4 +72,3 @@ print(f"Best l1_ratio: {best_l1:.4f}")
 print(f"Non-zero coefficients: {n_nonzero}")
 print(f"Test RMSE:  {rmse:.4f}")
 print(f"Test R^2:    {r2:.4f}")
-

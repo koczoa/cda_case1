@@ -1,5 +1,9 @@
 # cda_case1
 
+
+### Observations
+C2 only has 72 as a value, so it's really useless
+
 ### Idea
 The basic idea is ofc that we do not need all the variables, only a handful of variables are going to carry meaningful data
 
@@ -9,7 +13,7 @@ for this, first, we need to get which columns are the most correlated to the y c
 
 this gives:
 
-```y       1.000000
+```
 x_32    0.770303
 x_36    0.478040
 x_31    0.426011
