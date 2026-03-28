@@ -20,6 +20,7 @@ y = data['y'].values
 
 num_transformer = Pipeline([
     ('imputer', KNNImputer(n_neighbors=5)),
+    # ('fallback_imputer', SimpleImputer(strategy='median')),
     ('scaler', RobustScaler())
 ])
 
@@ -91,3 +92,11 @@ n_nonzero = np.sum(final_pipeline.named_steps['elasticnet'].coef_ != 0)
 print(f"Final Model - Best alpha: {best_alpha:.6f}")
 print(f"Final Model - Best l1_ratio: {best_l1:.4f}")
 print(f"Final Model - Non-zero coefs: {n_nonzero}")
+
+eval_ds = pd.read_csv("case1Data_Xnew.csv")
+
+predictions = final_pipeline.predict(eval_ds)
+
+pd.Series(predictions).to_csv(f"predictions.csv", index=False, header=False)
+
+pd.Series([estimated_rmse]).to_csv(f"estimatedRMSE.csv", index=False, header=False)
